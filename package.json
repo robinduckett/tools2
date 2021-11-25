@@ -1,0 +1,21 @@
+{
+  "name": "tools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jbinary": "^2.1.5",
+    "jdataview": "^2.5.0",
+    "webpack": "^5.64.3",
+    "webpack-cli": "^4.9.1"
+  },
+  "resolutions": {
+    "json-schema": "^0.4.0"
+  }
+}
