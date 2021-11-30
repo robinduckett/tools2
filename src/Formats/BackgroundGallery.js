@@ -1,15 +1,10 @@
-import jBinary from "jbinary";
-import jDataView from "jdataview";
 import Bitmap from "./Bitmap";
+import Gallery from "./Gallery";
 
-class BackgroundGallery {
+// BLK Files
+class BackgroundGallery extends Gallery {
   constructor(jbinary) {
-    /** @type {jBinary} */
-    this.data = new jBinary(jbinary, {
-      "jBinary.littleEndian": true,
-    });
-
-    this.InitBitmaps();
+    super(jbinary);
   }
 
   InitBitmaps() {
@@ -24,7 +19,7 @@ class BackgroundGallery {
 
     for (let i = 0; i < this.count; i++) {
       this.bitmaps.push(new Bitmap(this.pixelFormat));
-      this.bitmaps[i].InitHeader(this.data, this.pixelFormat);
+      this.bitmaps[i].InitHeader(this.data, this.pixelFormat, "BLK");
     }
 
     for (let i = 0; i < this.count; i++) {
@@ -68,16 +63,17 @@ class BackgroundGallery {
 
         while (len--) {
           const srcData = src.slice(
-            len * (bitmapWidth * 4),
-            len * bitmapWidth * 4 + bitmapWidth * 4
+            len * (bitmapWidth * bitsPerPixel),
+            len * bitmapWidth * bitsPerPixel + bitmapWidth * bitsPerPixel
           );
           
-          if (offset + len * width * 4 < dst.length + srcData.length)
-            dst.set(srcData, offset + len * width * 4);
+          if (offset + len * width * bitsPerPixel < dst.length + srcData.length)
+            dst.set(srcData, offset + len * width * bitsPerPixel);
         }
 
         i += this.tileHeight;
       }
+
       nextSet++;
     }
 

@@ -1,32 +1,41 @@
 import jBinary from "jbinary";
 
+import Gallery from "./Formats/Gallery";
 import BackgroundGallery from "./Formats/BackgroundGallery";
-import Bitmap from "./Formats/Bitmap";
+import CompressedGallery from "./Formats/CompressedGallery";
 
-export const loadFileFromFileInput = async (file) => {
+export const loadFromFileInput = async (file) => {
   if (typeof file["name"] !== "undefined") {
-    if (file.name.substr(-3) === "blk") {
-      const blk = await jBinary.loadData(file);
-      const backgroundGallery = new BackgroundGallery(blk);
-      return backgroundGallery.DrawBitmap();
-    }
-
-    if (file.name.substr(-3) === "s16") {
-      const s16 = await jBinary.loadData(file);
-      const bitmap = new Bitmap(s16);
-      return bitmap.DrawBitmap();
-    }
+    return loadFromData(file, file.name.substr(-3).toUpperCase())
+  } else {
+    throw "Needs to be a File/Blob object";
   }
 };
 
-export const loadBackground = async (file) => {
-  const blk = await jBinary.loadData(file);
-  const backgroundGallery = new BackgroundGallery(blk);
-  return backgroundGallery.DrawBitmap();
+export const loadFromData = async (data, type = "S16") => {
+  switch (type) {
+    case "S16":
+      return loadGallery(data);
+    case "C16":
+      return loadCompressedGallery(data);
+    case "BLK":
+      return loadBackgroundGallery(data);
+    default:
+      throw "Needs to specify a gallery type";
+  }
 };
 
-export const loadSprite = async (file) => {
+export const loadBackgroundGallery = async (file) => {
+  const blk = await jBinary.loadData(file);
+  return new BackgroundGallery(blk);
+};
+
+export const loadGallery = async (file) => {
   const s16 = await jBinary.loadData(file);
-  const bitmap = new Bitmap(s16);
-  return bitmap.DrawBitmap();
+  return new Gallery(s16);
+};
+
+export const loadCompressedGallery = async (file) => {
+  const c16 = await jBinary.loadData(file);
+  return new CompressedGallery(c16);
 };

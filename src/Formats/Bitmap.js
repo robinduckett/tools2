@@ -6,21 +6,22 @@ import {
 } from './Common';
 
 class Bitmap {
-  InitHeader(/** @type {jBinary} **/ data, format) {
+  InitHeader(/** @type {jBinary} **/ data, format, type = 'S16') {
     this.pixelFormat = format;
     this.offset = data.read("uint32");
     this.width = data.read("uint16");
     this.height = data.read("uint16");
 
+    // Hack because it seems like BLK files don't draw properly ? All other filetypes work fine.
+    if (type === 'BLK') {
+      this.offset += 4;
+    }
+
     /** @type {jBinary} **/
     this.data = data;
+
+    console.assert(this.offset < this.data.view.byteLength, 'offset is greater than data view bytelength');
   }
-
-  // LoadFromS16(/** @type {jBinary} */ data) {
-  //   this.dataFlag = true;
-
-  //   const bitsPerPixel = 2;
-  // }
 
   SetData(data) {
     /** @type {jBinary} **/ this.data = data;
@@ -37,7 +38,7 @@ class Bitmap {
         let rgb;
         /** @type {jBinary} **/ const pixel = this.data.read(
           "uint16",
-          4 + this.offset + (i * 2)
+          this.offset + (i * 2)
         );
 
         if (this.pixelFormat === 0) {
