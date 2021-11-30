@@ -51,14 +51,8 @@ class BackgroundGallery extends Gallery {
 
         const screen_y_pos = tileY * bitmapHeight * width * bitsPerPixel;
         const screen_x_pos = tileX * bitmapWidth * bitsPerPixel;
-
-        const screenIndex = screen_x_pos + screen_y_pos;
-        dst[screenIndex] = 255;
-        dst[screenIndex + 1] = 0;
-        dst[screenIndex + 2] = 0;
-        dst[screenIndex + 3] = 255;
-
-        let offset = screenIndex;
+        
+        let offset = screen_x_pos + screen_y_pos;
         let len = bitmapHeight;
 
         while (len--) {

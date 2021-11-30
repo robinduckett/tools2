@@ -19,7 +19,6 @@ clbTools.loadBackgroundGallery(c3_splash_blk)
 //   canvas.height = imgData.height;
 //   ctx.fillStyle = "red";
 //   ctx.fillRect(0, 0, imgData.width, imgData.height);
-//   // ctx.drawImage(imgData, 0, 0);
 //   ctx.putImageData(imgData, 0, 0);
 // });
 
